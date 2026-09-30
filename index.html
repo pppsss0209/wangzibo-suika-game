@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#fff3e0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="合成王子博">
+  <meta name="description" content="合成王子博：拖动瞄准、松手投放，相同的大头撞在一起合成更大的头像。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="合成王子博">
+  <meta property="og:description" content="相同的大头撞在一起，越合越大。来挑战我的最高分。">
+  <meta property="og:image" content="assets/share-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>合成王子博</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section class="stage" id="stage">
+      <canvas id="game" aria-label="合成王子博游戏区域"></canvas>
+
+      <div class="overlay" id="overlay" aria-hidden="true">
+        <div class="dialog">
+          <div class="dialog-mark" aria-hidden="true">王</div>
+          <h2 id="overTitle">堆到线啦</h2>
+          <p class="dialog-score">本局得分 <strong id="finalScore">0</strong></p>
+          <p class="dialog-best">最高分 <span id="finalBest">0</span></p>
+          <div class="dialog-actions">
+            <button class="btn" id="shareBtn2" type="button">分享成绩</button>
+            <button class="btn btn-primary" id="restartBtn" type="button">再来一局</button>
+          </div>
+          <p class="dialog-hint">按 R 键也可重新开始</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <header class="panel-head">
+        <h1>合成王子博</h1>
+        <p class="subtitle">相同的大头撞在一起，越合越大</p>
+      </header>
+
+      <div class="challenge" id="challenge" hidden>
+        <span>好友挑战</span>
+        <strong id="challengeScore">0 分</strong>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">分数</span>
+          <strong class="stat-value" id="score">0</strong>
+        </div>
+        <div class="stat">
+          <span class="stat-label">最高分</span>
+          <strong class="stat-value stat-best" id="best">0</strong>
+        </div>
+      </div>
+
+      <div class="next-box">
+        <span class="box-label">下一个</span>
+        <canvas id="next" width="180" height="180" aria-label="下一个头像"></canvas>
+      </div>
+
+      <div class="chain-box">
+        <span class="box-label">合成表</span>
+        <canvas id="chain" width="680" height="160" aria-label="头像合成顺序"></canvas>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-wide" id="shareBtn" type="button">分享给好友</button>
+        <button class="btn" id="recordBtn" type="button">
+          <span class="lbl">高手榜</span>
+        </button>
+        <button class="btn" id="soundBtn" type="button" aria-pressed="true">
+          <span class="lbl">音效开</span>
+        </button>
+        <button class="btn btn-primary btn-wide" id="resetBtn" type="button">
+          <span class="lbl">重新开始</span>
+        </button>
+      </div>
+
+      <p class="tips">
+        鼠标：移动瞄准、点击投放；触屏：拖动瞄准、松手投放。<br>
+        ← → 或 A D 微调，空格投放，R 重开。
+      </p>
+    </aside>
+  </main>
+
+  <div class="modal" id="recordModal" aria-hidden="true" role="dialog" aria-label="高手榜">
+    <div class="modal-card">
+      <header class="modal-head">
+        <h2>本机高手榜</h2>
+        <button class="icon-btn" id="recordClose" type="button" aria-label="关闭">×</button>
+      </header>
+      <div class="nick-row">
+        <label class="nick-label" for="nickInput">我的昵称</label>
+        <input class="nick-input" id="nickInput" type="text" maxlength="12" placeholder="默认用户" autocomplete="nickname">
+      </div>
+      <div class="board-list" id="boardList"></div>
+      <footer class="modal-foot">
+        <span class="board-note">成绩保存在当前设备，分享链接可让好友挑战。</span>
+        <button class="btn" id="recordClear" type="button">清空</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-const CACHE = 'wangzibo-suika-v4';
+const CACHE = 'wangzibo-suika-v6';
 const ASSETS = [
   './',
   './index.html',

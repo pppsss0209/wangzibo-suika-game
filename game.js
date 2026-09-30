@@ -1337,7 +1337,7 @@
   function registerServiceWorker() {
     if (window.__ASSET_MAP) return;
     if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') return;
-    navigator.serviceWorker.register('sw.js').catch(() => {
+    navigator.serviceWorker.register('sw.js?v=6').catch(() => {
       // Offline cache is optional; the game still works online without it.
     });
   }

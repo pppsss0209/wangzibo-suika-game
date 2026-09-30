@@ -96,15 +96,6 @@
       parts: [[-0.12, -0.28, 0.54], [0.2, -0.03, 0.52], [-0.24, 0.2, 0.48], [0.16, 0.42, 0.43]]
     },
     {
-      name: '坐床',
-      file: 'photos/08-bed.jpg',
-      r: 76,
-      color: '#6e667d',
-      crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'full',
-      parts: [[-0.02, -0.42, 0.38], [-0.08, -0.06, 0.46], [0.04, 0.27, 0.5], [-0.04, 0.58, 0.43]]
-    },
-    {
       name: '日落',
       file: 'photos/09-sunset.jpg',
       r: 87,
@@ -127,7 +118,7 @@
   ];
 
   const MAX_TIER = HEADS.length - 1;
-  const MERGE_SCORE = [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55];
+  const MERGE_SCORE = [0, 1, 3, 6, 10, 15, 21, 28, 36];
   const MAX_BONUS = 100;
   const SPAWN_TIERS = [0, 1, 2];
   const SPAWN_WEIGHTS = [0.46, 0.34, 0.20];
@@ -1388,7 +1379,7 @@
   function registerServiceWorker() {
     if (window.__ASSET_MAP) return;
     if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') return;
-    navigator.serviceWorker.register('sw.js?v=8').catch(() => {
+    navigator.serviceWorker.register('sw.js?v=9').catch(() => {
       // Offline cache is optional; the game still works online without it.
     });
   }

@@ -1,4 +1,4 @@
-const CACHE = 'wangzibo-suika-v8';
+const CACHE = 'wangzibo-suika-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -14,7 +14,6 @@ const ASSETS = [
   './photos/05-photo.jpg',
   './photos/06-portrait.jpg',
   './photos/07-profile.jpg',
-  './photos/08-bed.jpg',
   './photos/09-sunset.jpg',
   './photos/10-bus.jpg'
 ];

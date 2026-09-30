@@ -44,7 +44,7 @@
       r: 26,
       color: '#498c7d',
       crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'front',
+      mask: 'umbrella',
       parts: [[0, -0.37, 0.63], [-0.43, -0.03, 0.43], [0.43, -0.03, 0.43], [0, 0.23, 0.56], [-0.19, 0.46, 0.32], [0.19, 0.46, 0.32]]
     },
     {
@@ -53,8 +53,8 @@
       r: 35,
       color: '#4b78a8',
       crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'profile',
-      parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42]]
+      mask: 'window',
+      parts: [[-0.12, -0.32, 0.62], [0.28, -0.12, 0.58], [-0.28, 0.08, 0.5], [0.25, 0.22, 0.52], [0.02, 0.47, 0.44]]
     },
     {
       name: '雨窗',
@@ -80,7 +80,7 @@
       r: 86,
       color: '#a56635',
       crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'profile',
+      mask: 'silhouette',
       parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42], [-0.22, 0.62, 0.4]]
     }
   ];
@@ -263,6 +263,27 @@
       target.bezierCurveTo(320 * s, 539 * s, 284 * s, 473 * s, 280 * s, 399 * s);
       target.bezierCurveTo(196 * s, 384 * s, 166 * s, 292 * s, 195 * s, 207 * s);
       target.bezierCurveTo(207 * s, 167 * s, 217 * s, 113 * s, 241 * s, 70 * s);
+    } else if (mask === 'umbrella') {
+      target.moveTo(58 * s, 42 * s);
+      target.bezierCurveTo(196 * s, -8 * s, 542 * s, -4 * s, 694 * s, 108 * s);
+      target.bezierCurveTo(774 * s, 176 * s, 772 * s, 550 * s, 670 * s, 720 * s);
+      target.bezierCurveTo(560 * s, 786 * s, 174 * s, 800 * s, 62 * s, 704 * s);
+      target.bezierCurveTo(-12 * s, 622 * s, -14 * s, 190 * s, 58 * s, 42 * s);
+    } else if (mask === 'window') {
+      target.moveTo(78 * s, 34 * s);
+      target.bezierCurveTo(222 * s, -10 * s, 650 * s, -8 * s, 758 * s, 136 * s);
+      target.bezierCurveTo(810 * s, 260 * s, 800 * s, 584 * s, 704 * s, 724 * s);
+      target.bezierCurveTo(580 * s, 794 * s, 162 * s, 802 * s, 70 * s, 696 * s);
+      target.bezierCurveTo(-8 * s, 560 * s, -10 * s, 148 * s, 78 * s, 34 * s);
+    } else if (mask === 'silhouette') {
+      target.moveTo(330 * s, 36 * s);
+      target.bezierCurveTo(200 * s, 28 * s, 84 * s, 105 * s, 58 * s, 224 * s);
+      target.lineTo(0 * s, 252 * s);
+      target.lineTo(0 * s, 790 * s);
+      target.lineTo(626 * s, 790 * s);
+      target.bezierCurveTo(590 * s, 674 * s, 548 * s, 560 * s, 500 * s, 458 * s);
+      target.bezierCurveTo(456 * s, 364 * s, 438 * s, 250 * s, 428 * s, 168 * s);
+      target.bezierCurveTo(416 * s, 92 * s, 378 * s, 40 * s, 330 * s, 36 * s);
     } else if (mask === 'tight') {
       target.moveTo(360 * s, 150 * s);
       target.bezierCurveTo(282 * s, 142 * s, 212 * s, 188 * s, 160 * s, 272 * s);

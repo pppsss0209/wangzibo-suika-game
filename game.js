@@ -86,6 +86,7 @@
   const MUTE_KEY = 'wangzibo.suika.mute.v1';
   const RECORD_KEY = 'wangzibo.suika.records.v1';
   const NAME_KEY = 'wangzibo.suika.name.v1';
+  const ACCESS_KEY = 'wangzibo.suika.access.v1';
 
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
@@ -113,6 +114,10 @@
   const challenge = document.getElementById('challenge');
   const challengeScore = document.getElementById('challengeScore');
   const toast = document.getElementById('toast');
+  const accessGate = document.getElementById('accessGate');
+  const accessForm = document.getElementById('accessForm');
+  const accessInput = document.getElementById('accessInput');
+  const accessError = document.getElementById('accessError');
 
   const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
   const rand = (a, b) => a + Math.random() * (b - a);
@@ -1287,6 +1292,37 @@
     });
   }
 
+  function unlockAccess(save) {
+    accessGate.classList.add('hidden');
+    document.body.classList.remove('locked');
+    if (save) sessionStorage.setItem(ACCESS_KEY, '1');
+    setTimeout(resizeCanvas, 30);
+  }
+
+  function setupAccessGate() {
+    accessForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const entered = accessInput.value.trim();
+      const expected = atob('MDIwOQ==');
+      if (entered === expected) {
+        accessError.textContent = '';
+        unlockAccess(true);
+        return;
+      }
+      accessError.textContent = '口令不正确，请重试';
+      accessForm.classList.remove('shake');
+      void accessForm.offsetWidth;
+      accessForm.classList.add('shake');
+      accessInput.select();
+    });
+
+    if (sessionStorage.getItem(ACCESS_KEY) === '1') {
+      unlockAccess(false);
+    } else {
+      setTimeout(() => accessInput.focus(), 80);
+    }
+  }
+
   function boot() {
     resizeCanvas();
     if (window.ResizeObserver) {
@@ -1298,6 +1334,7 @@
       if (!document.hidden) last = performance.now();
     });
     paintSoundBtn();
+    setupAccessGate();
     drawChain();
     reset();
     loadSprites();

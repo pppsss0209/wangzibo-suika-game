@@ -20,7 +20,19 @@
   <link rel="apple-touch-icon" href="assets/icon-192.png">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="locked">
+  <div class="access-gate" id="accessGate" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+    <form class="access-card" id="accessForm">
+      <div class="access-mark" aria-hidden="true">王</div>
+      <h2 id="accessTitle">进入合成王子博</h2>
+      <p>请输入访问口令</p>
+      <label class="access-label" for="accessInput">访问口令</label>
+      <input class="access-input" id="accessInput" type="password" inputmode="numeric" autocomplete="current-password" enterkeyhint="done" maxlength="12" required>
+      <p class="access-error" id="accessError" aria-live="polite"></p>
+      <button class="btn btn-primary access-submit" type="submit">进入游戏</button>
+    </form>
+  </div>
+
   <main class="app">
     <section class="stage" id="stage">
       <canvas id="game" aria-label="合成王子博游戏区域"></canvas>

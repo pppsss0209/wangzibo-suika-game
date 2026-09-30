@@ -1,4 +1,4 @@
-const CACHE = 'wangzibo-suika-v6';
+const CACHE = 'wangzibo-suika-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -11,8 +11,12 @@ const ASSETS = [
   './photos/02-umbrella.jpg',
   './photos/03-window.jpg',
   './photos/04-rain.jpg',
-  './photos/05-bed.jpg',
-  './photos/06-sunset.jpg'
+  './photos/05-photo.jpg',
+  './photos/06-portrait.jpg',
+  './photos/07-profile.jpg',
+  './photos/08-bed.jpg',
+  './photos/09-sunset.jpg',
+  './photos/10-bus.jpg'
 ];
 
 self.addEventListener('install', (event) => {

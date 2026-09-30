@@ -66,9 +66,39 @@
       parts: [[0, -0.37, 0.64], [-0.44, -0.02, 0.43], [0.44, -0.02, 0.43], [0, 0.24, 0.57], [-0.2, 0.47, 0.32], [0.2, 0.47, 0.32]]
     },
     {
+      name: '拍照',
+      file: 'photos/05-photo.jpg',
+      r: 48,
+      color: '#4d7b61',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      fit: 'contain',
+      mask: 'portrait',
+      parts: [[-0.08, -0.23, 0.47], [0.2, -0.03, 0.5], [-0.2, 0.2, 0.46], [0.14, 0.42, 0.42]]
+    },
+    {
+      name: '肖像',
+      file: 'photos/06-portrait.jpg',
+      r: 57,
+      color: '#8b6d4f',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      fit: 'contain',
+      mask: 'portrait',
+      parts: [[0, -0.3, 0.56], [-0.26, 0.02, 0.46], [0.28, 0.02, 0.46], [0.04, 0.42, 0.44]]
+    },
+    {
+      name: '窗前',
+      file: 'photos/07-profile.jpg',
+      r: 67,
+      color: '#5a7554',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      fit: 'contain',
+      mask: 'portrait',
+      parts: [[-0.12, -0.28, 0.54], [0.2, -0.03, 0.52], [-0.24, 0.2, 0.48], [0.16, 0.42, 0.43]]
+    },
+    {
       name: '坐床',
-      file: 'photos/05-bed.jpg',
-      r: 66,
+      file: 'photos/08-bed.jpg',
+      r: 76,
       color: '#6e667d',
       crop: { x: 0, y: 0, w: 1, h: 1 },
       mask: 'full',
@@ -76,17 +106,28 @@
     },
     {
       name: '日落',
-      file: 'photos/06-sunset.jpg',
-      r: 86,
+      file: 'photos/09-sunset.jpg',
+      r: 87,
       color: '#a56635',
       crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'silhouette',
+      fit: 'contain',
+      mask: 'portrait',
       parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42], [-0.22, 0.62, 0.4]]
+    },
+    {
+      name: '车上看树',
+      file: 'photos/10-bus.jpg',
+      r: 100,
+      color: '#334c58',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      fit: 'contain',
+      mask: 'portrait',
+      parts: [[-0.04, -0.32, 0.54], [0.05, 0.02, 0.56], [-0.12, 0.34, 0.55], [-0.08, 0.65, 0.45]]
     }
   ];
 
   const MAX_TIER = HEADS.length - 1;
-  const MERGE_SCORE = [0, 1, 3, 6, 10, 15];
+  const MERGE_SCORE = [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55];
   const MAX_BONUS = 100;
   const SPAWN_TIERS = [0, 1, 2];
   const SPAWN_WEIGHTS = [0.46, 0.34, 0.20];
@@ -275,15 +316,14 @@
       target.bezierCurveTo(810 * s, 260 * s, 800 * s, 584 * s, 704 * s, 724 * s);
       target.bezierCurveTo(580 * s, 794 * s, 162 * s, 802 * s, 70 * s, 696 * s);
       target.bezierCurveTo(-8 * s, 560 * s, -10 * s, 148 * s, 78 * s, 34 * s);
-    } else if (mask === 'silhouette') {
-      target.moveTo(330 * s, 36 * s);
-      target.bezierCurveTo(200 * s, 28 * s, 84 * s, 105 * s, 58 * s, 224 * s);
-      target.lineTo(0 * s, 252 * s);
-      target.lineTo(0 * s, 790 * s);
-      target.lineTo(626 * s, 790 * s);
-      target.bezierCurveTo(590 * s, 674 * s, 548 * s, 560 * s, 500 * s, 458 * s);
-      target.bezierCurveTo(456 * s, 364 * s, 438 * s, 250 * s, 428 * s, 168 * s);
-      target.bezierCurveTo(416 * s, 92 * s, 378 * s, 40 * s, 330 * s, 36 * s);
+    } else if (mask === 'portrait') {
+      target.moveTo(92 * s, 22 * s);
+      target.bezierCurveTo(244 * s, -4 * s, 560 * s, -2 * s, 694 * s, 38 * s);
+      target.bezierCurveTo(762 * s, 66 * s, 774 * s, 186 * s, 766 * s, 398 * s);
+      target.bezierCurveTo(760 * s, 620 * s, 742 * s, 738 * s, 684 * s, 762 * s);
+      target.bezierCurveTo(514 * s, 792 * s, 230 * s, 794 * s, 82 * s, 756 * s);
+      target.bezierCurveTo(16 * s, 738 * s, -8 * s, 636 * s, 2 * s, 410 * s);
+      target.bezierCurveTo(10 * s, 176 * s, 20 * s, 62 * s, 92 * s, 22 * s);
     } else if (mask === 'tight') {
       target.moveTo(360 * s, 150 * s);
       target.bezierCurveTo(282 * s, 142 * s, 212 * s, 188 * s, 160 * s, 272 * s);
@@ -328,6 +368,13 @@
     target.drawImage(image, sourceX, sourceY, sourceW, sourceH, 0, 0, size, size);
   }
 
+  function drawImageContain(target, image, size) {
+    const scale = Math.min(size / image.width, size / image.height);
+    const width = image.width * scale;
+    const height = image.height * scale;
+    target.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+  }
+
   function buildCutout(image, tier) {
     const size = 512;
     const head = HEADS[tier];
@@ -339,7 +386,11 @@
     offCtx.save();
     headPath(offCtx, size, head.mask);
     offCtx.clip();
-    drawImageCover(offCtx, image, size, head.crop);
+    if (head.fit === 'contain') {
+      drawImageContain(offCtx, image, size);
+    } else {
+      drawImageCover(offCtx, image, size, head.crop);
+    }
     offCtx.restore();
 
     offCtx.save();
@@ -1337,7 +1388,7 @@
   function registerServiceWorker() {
     if (window.__ASSET_MAP) return;
     if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') return;
-    navigator.serviceWorker.register('sw.js?v=6').catch(() => {
+    navigator.serviceWorker.register('sw.js?v=8').catch(() => {
       // Offline cache is optional; the game still works online without it.
     });
   }

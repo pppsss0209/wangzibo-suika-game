@@ -30,7 +30,7 @@
 
   const HEADS = [
     {
-      name: '伞下',
+      name: '初见',
       file: 'photos/01-first.jpg',
       r: 18,
       color: '#d97745',
@@ -39,45 +39,54 @@
       parts: [[0, -0.37, 0.63], [-0.43, -0.03, 0.43], [0.43, -0.03, 0.43], [0, 0.23, 0.56], [-0.19, 0.46, 0.32], [0.19, 0.46, 0.32]]
     },
     {
-      name: '窗边',
-      file: 'photos/02-window.jpg',
-      r: 25,
+      name: '伞下',
+      file: 'photos/02-umbrella.jpg',
+      r: 26,
       color: '#498c7d',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      mask: 'front',
+      parts: [[0, -0.37, 0.63], [-0.43, -0.03, 0.43], [0.43, -0.03, 0.43], [0, 0.23, 0.56], [-0.19, 0.46, 0.32], [0.19, 0.46, 0.32]]
+    },
+    {
+      name: '窗边',
+      file: 'photos/03-window.jpg',
+      r: 35,
+      color: '#4b78a8',
       crop: { x: 0, y: 0, w: 1, h: 1 },
       mask: 'profile',
       parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42]]
     },
     {
       name: '雨窗',
-      file: 'photos/03-rain.jpg',
-      r: 34,
-      color: '#4b78a8',
-      crop: { x: 0, y: 0, w: 1, h: 1 },
-      mask: 'front',
-      parts: [[0, -0.37, 0.64], [-0.44, -0.02, 0.43], [0.44, -0.02, 0.43], [0, 0.24, 0.57], [-0.2, 0.47, 0.32], [0.2, 0.47, 0.32]]
-    },
-    {
-      name: '大笑',
-      file: 'photos/04-close.jpg',
-      r: 45,
+      file: 'photos/04-rain.jpg',
+      r: 46,
       color: '#e05c54',
       crop: { x: 0, y: 0, w: 1, h: 1 },
       mask: 'front',
       parts: [[0, -0.37, 0.64], [-0.44, -0.02, 0.43], [0.44, -0.02, 0.43], [0, 0.24, 0.57], [-0.2, 0.47, 0.32], [0.2, 0.47, 0.32]]
     },
     {
+      name: '坐床',
+      file: 'photos/05-bed.jpg',
+      r: 66,
+      color: '#6e667d',
+      crop: { x: 0, y: 0, w: 1, h: 1 },
+      mask: 'full',
+      parts: [[-0.02, -0.42, 0.38], [-0.08, -0.06, 0.46], [0.04, 0.27, 0.5], [-0.04, 0.58, 0.43]]
+    },
+    {
       name: '日落',
-      file: 'photos/05-sunset.jpg',
-      r: 58,
+      file: 'photos/06-sunset.jpg',
+      r: 86,
       color: '#a56635',
       crop: { x: 0, y: 0, w: 1, h: 1 },
       mask: 'profile',
-      parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42]]
+      parts: [[-0.12, -0.31, 0.65], [0.28, -0.16, 0.58], [-0.33, 0.05, 0.49], [0.24, 0.19, 0.54], [-0.04, 0.42, 0.42], [-0.22, 0.62, 0.4]]
     }
   ];
 
   const MAX_TIER = HEADS.length - 1;
-  const MERGE_SCORE = [0, 1, 3, 6, 10];
+  const MERGE_SCORE = [0, 1, 3, 6, 10, 15];
   const MAX_BONUS = 100;
   const SPAWN_TIERS = [0, 1, 2];
   const SPAWN_WEIGHTS = [0.46, 0.34, 0.20];
@@ -254,6 +263,26 @@
       target.bezierCurveTo(320 * s, 539 * s, 284 * s, 473 * s, 280 * s, 399 * s);
       target.bezierCurveTo(196 * s, 384 * s, 166 * s, 292 * s, 195 * s, 207 * s);
       target.bezierCurveTo(207 * s, 167 * s, 217 * s, 113 * s, 241 * s, 70 * s);
+    } else if (mask === 'tight') {
+      target.moveTo(360 * s, 150 * s);
+      target.bezierCurveTo(282 * s, 142 * s, 212 * s, 188 * s, 160 * s, 272 * s);
+      target.bezierCurveTo(112 * s, 350 * s, 102 * s, 458 * s, 126 * s, 554 * s);
+      target.bezierCurveTo(144 * s, 629 * s, 200 * s, 714 * s, 282 * s, 759 * s);
+      target.bezierCurveTo(386 * s, 779 * s, 506 * s, 740 * s, 586 * s, 660 * s);
+      target.bezierCurveTo(652 * s, 592 * s, 664 * s, 468 * s, 636 * s, 354 * s);
+      target.bezierCurveTo(611 * s, 251 * s, 527 * s, 174 * s, 438 * s, 153 * s);
+      target.bezierCurveTo(410 * s, 146 * s, 386 * s, 146 * s, 360 * s, 150 * s);
+    } else if (mask === 'full') {
+      target.moveTo(392 * s, 34 * s);
+      target.bezierCurveTo(306 * s, 28 * s, 267 * s, 106 * s, 266 * s, 184 * s);
+      target.bezierCurveTo(265 * s, 242 * s, 294 * s, 282 * s, 319 * s, 311 * s);
+      target.bezierCurveTo(298 * s, 342 * s, 272 * s, 387 * s, 257 * s, 444 * s);
+      target.bezierCurveTo(243 * s, 495 * s, 248 * s, 554 * s, 293 * s, 616 * s);
+      target.bezierCurveTo(254 * s, 677 * s, 226 * s, 735 * s, 232 * s, 765 * s);
+      target.bezierCurveTo(321 * s, 777 * s, 492 * s, 771 * s, 606 * s, 708 * s);
+      target.bezierCurveTo(566 * s, 633 * s, 526 * s, 590 * s, 505 * s, 520 * s);
+      target.bezierCurveTo(486 * s, 438 * s, 458 * s, 351 * s, 414 * s, 311 * s);
+      target.bezierCurveTo(441 * s, 242 * s, 450 * s, 90 * s, 392 * s, 34 * s);
     } else {
       target.moveTo(256 * s, 28 * s);
       target.bezierCurveTo(168 * s, 28 * s, 91 * s, 96 * s, 76 * s, 193 * s);

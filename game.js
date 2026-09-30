@@ -27,6 +27,8 @@
   const SQUASH_MAX = 0.30;
   const MERGE_PAD = 0.8;
   const HEAD_FILL = 0.96;
+  const HIT_SCALE = 1.02;
+  const COLLISION_GRID = 5;
 
   const HEADS = [
     {
@@ -366,6 +368,85 @@
     target.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
   }
 
+  function buildCollisionShape(source, tier) {
+    const width = source.width;
+    const height = source.height;
+    const pixels = source.getContext('2d').getImageData(0, 0, width, height).data;
+    let minX = width;
+    let minY = height;
+    let maxX = -1;
+    let maxY = -1;
+
+    for (let y = 0; y < height; y += 3) {
+      for (let x = 0; x < width; x += 3) {
+        if (pixels[(y * width + x) * 4 + 3] < 34) continue;
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+
+    if (maxX < minX || maxY < minY) {
+      HEADS[tier].collision = null;
+      return;
+    }
+
+    const spanX = maxX - minX + 1;
+    const spanY = maxY - minY + 1;
+    const cellW = spanX / COLLISION_GRID;
+    const cellH = spanY / COLLISION_GRID;
+    const parts = [];
+
+    for (let gridY = 0; gridY < COLLISION_GRID; gridY++) {
+      for (let gridX = 0; gridX < COLLISION_GRID; gridX++) {
+        const left = minX + gridX * cellW;
+        const top = minY + gridY * cellH;
+        const right = left + cellW;
+        const bottom = top + cellH;
+        let count = 0;
+        let sumX = 0;
+        let sumY = 0;
+
+        for (let y = Math.floor(top); y < Math.ceil(bottom); y += 2) {
+          if (y < 0 || y >= height) continue;
+          for (let x = Math.floor(left); x < Math.ceil(right); x += 2) {
+            if (x < 0 || x >= width) continue;
+            if (pixels[(y * width + x) * 4 + 3] < 28) continue;
+            count += 1;
+            sumX += x;
+            sumY += y;
+          }
+        }
+
+        if (count < 4) continue;
+        const centerX = sumX / count;
+        const centerY = sumY / count;
+        const area = count * 4;
+        const radius = Math.max(5, Math.sqrt(area / Math.PI) * 1.22);
+        const normal = width / 2;
+        const hitRadius = normal * HEAD_FILL;
+        parts.push([
+          (centerX - width / 2) / hitRadius,
+          (centerY - height / 2) / hitRadius,
+          radius / hitRadius
+        ]);
+      }
+    }
+
+    if (!parts.length) {
+      HEADS[tier].collision = null;
+      return;
+    }
+
+    let bounds = 0;
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      bounds = Math.max(bounds, Math.hypot(part[0], part[1]) + part[2]);
+    }
+    HEADS[tier].collision = { parts, rb: bounds };
+  }
+
   function buildCutout(image, tier) {
     const size = 512;
     const head = HEADS[tier];
@@ -384,17 +465,7 @@
     }
     offCtx.restore();
 
-    offCtx.save();
-    headPath(offCtx, size, head.mask);
-    offCtx.lineJoin = 'round';
-    offCtx.lineCap = 'round';
-    offCtx.lineWidth = 11;
-    offCtx.strokeStyle = 'rgba(255,255,255,.92)';
-    offCtx.stroke();
-    offCtx.lineWidth = 5;
-    offCtx.strokeStyle = head.color;
-    offCtx.stroke();
-    offCtx.restore();
+    buildCollisionShape(offscreen, tier);
 
     cutouts[tier] = offscreen;
     loadedCount += 1;
@@ -423,8 +494,8 @@
   function shapeOf(tier) {
     const head = HEADS[tier];
     return {
-      rb: 1,
-      parts: head.parts
+      rb: head.collision ? head.collision.rb : 1,
+      parts: head.collision ? head.collision.parts : head.parts
     };
   }
 
@@ -433,11 +504,12 @@
     const sin = Math.sin(ball.angle);
     for (let i = 0; i < ball.parts.length; i++) {
       const part = ball.parts[i];
-      const ox = part[0] * ball.r;
-      const oy = part[1] * ball.r;
+      const hitRadius = ball.r * HIT_SCALE;
+      const ox = part[0] * hitRadius;
+      const oy = part[1] * hitRadius;
       ball.wx[i] = ball.x + ox * cos - oy * sin;
       ball.wy[i] = ball.y + ox * sin + oy * cos;
-      ball.ws[i] = part[2] * ball.r;
+      ball.ws[i] = part[2] * hitRadius;
     }
   }
 
@@ -468,7 +540,7 @@
       sq: 0,
       sqA: 0,
       parts: shape.parts,
-      rb: shape.rb * radius,
+      rb: shape.rb * radius * HIT_SCALE,
       wx: new Float32Array(count),
       wy: new Float32Array(count),
       ws: new Float32Array(count)
@@ -776,7 +848,7 @@
   }
 
   function aimLimit(tier) {
-    const radius = HEADS[tier].r * shapeOf(tier).rb;
+    const radius = HEADS[tier].r * shapeOf(tier).rb * HIT_SCALE;
     return [WALL + radius + 0.5, W - WALL - radius - 0.5];
   }
 
@@ -912,26 +984,11 @@
     ctx.fillRect(0, 0, W, 190);
 
     ctx.save();
-    ctx.strokeStyle = 'rgba(174, 126, 80, .28)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(WALL, 0);
-    ctx.lineTo(WALL, H - WALL);
-    ctx.lineTo(W - WALL, H - WALL);
-    ctx.lineTo(W - WALL, 0);
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.save();
-    ctx.setLineDash([9, 9]);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = state.danger
-      ? 'rgba(226,70,67,' + (0.55 + 0.45 * Math.abs(Math.sin(performance.now() / 140))) + ')'
-      : 'rgba(213, 137, 104, .42)';
-    ctx.beginPath();
-    ctx.moveTo(WALL, DANGER_Y);
-    ctx.lineTo(W - WALL, DANGER_Y);
-    ctx.stroke();
+    ctx.globalAlpha = state.danger
+      ? 0.12 + 0.10 * Math.abs(Math.sin(performance.now() / 140))
+      : 0.07;
+    ctx.fillStyle = state.danger ? '#cf4944' : '#9f7d62';
+    ctx.fillRect(WALL, DANGER_Y - 5, W - WALL * 2, 10);
     ctx.restore();
   }
 
@@ -971,16 +1028,6 @@
     const ready = state.ready;
 
     if (ready) {
-      ctx.save();
-      ctx.setLineDash([5, 8]);
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = 'rgba(190, 126, 77, .45)';
-      ctx.beginPath();
-      ctx.moveTo(x, DROP_Y + radius + 5);
-      ctx.lineTo(x, H - WALL);
-      ctx.stroke();
-      ctx.restore();
-
       ctx.save();
       ctx.globalAlpha = 0.18;
       ctx.fillStyle = HEADS[tier].color;
@@ -1379,7 +1426,7 @@
   function registerServiceWorker() {
     if (window.__ASSET_MAP) return;
     if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') return;
-    navigator.serviceWorker.register('sw.js?v=9').catch(() => {
+    navigator.serviceWorker.register('sw.js?v=10').catch(() => {
       // Offline cache is optional; the game still works online without it.
     });
   }
